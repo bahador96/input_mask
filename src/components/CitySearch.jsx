@@ -1,3 +1,4 @@
+// export default CitySearch;
 import React, { useState } from "react";
 import cities from "../cities.json";
 import Input from "./Input";
@@ -12,7 +13,9 @@ const CitySearch = () => {
 
     // فیلتر کردن شهرها براساس ورودی
     if (value !== "") {
-      const filteredCities = cities.filter((city) => city.startsWith(value));
+      const filteredCities = cities.filter((city) =>
+        city.toLowerCase().startsWith(value.toLowerCase())
+      ); // حساسیت به بزرگی حروف را حذف می‌کند
       setSuggestions(filteredCities);
     } else {
       setSuggestions([]);
@@ -21,15 +24,16 @@ const CitySearch = () => {
 
   return (
     <div>
-      <Input handleChange={handleChange} hint="Enter city name" />
-
-      {suggestions.length > 0 && (
-        <ul>
-          {suggestions.map((city, index) => (
-            <li key={index}>{city}</li>
-          ))}
-        </ul>
-      )}
+      <Input
+        handleChange={handleChange}
+        hint="Enter city name"
+        inputValue={inputValue}
+      />
+      {/* نمایش شهرهای پیشنهادی در datalist برای autocomplete */}
+      <datalist id="city-suggestions">
+        {suggestions.length > 0 &&
+          suggestions.map((city, index) => <option key={index} value={city} />)}
+      </datalist>
     </div>
   );
 };
